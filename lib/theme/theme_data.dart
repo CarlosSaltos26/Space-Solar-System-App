@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData.dark().copyWith(
+
+      textTheme: ThemeData.dark().textTheme.apply(
+        fontFamily: 'Montserrat',
+      ),
+
       // Aquí puedes agregar tus colores principales de la app si deseas
       scaffoldBackgroundColor: const Color(0xFF0A0E21), 
       

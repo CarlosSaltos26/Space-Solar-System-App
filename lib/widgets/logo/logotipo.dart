@@ -14,7 +14,7 @@ class Logotipo extends StatelessWidget {
           padding: const EdgeInsets.only(top: 8.0),
           child: SizedBox(
             // Ajusta según necesites
-            width: 540.w,
+            width: 580.w,
             child: SvgPicture.asset(
               'assets/LogotipoSpace.svg',
               //colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn)
