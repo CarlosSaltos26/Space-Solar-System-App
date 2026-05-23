@@ -26,6 +26,8 @@ class HomeScreen extends StatelessWidget {
           SistemaSolar(),
           //Boton Explorar planetas
           BotonExplorar(),
+
+          
         ],
       ),
     );

@@ -29,53 +29,62 @@ class _PlanetListState extends State<PlanetList> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  
                   //logotipo en la parte superior
                   Logotipo(),
-                  
+
                   //separacion de 20 px
-                  SizedBox(height: 20,),
+                  SizedBox(height: 20),
 
                   //Texto Planetas
-                  Text("PLANETAS DEL SISTEMA SOLAR",
-                  style: TextStyle(
-                    fontSize: 55.sp
-                  ),
+                  Text(
+                    "PLANETAS DEL SISTEMA SOLAR",
+                    style: TextStyle(fontSize: 55.sp),
                   ),
 
                   //separacion de 20 px
-                  SizedBox(height: 20,),
+                  SizedBox(height: 20),
 
                   //Lista de planetas
-                  Expanded(
-                    child: ListaPlanetas(),
-                  )
-                  
+                  Expanded(child: ListaPlanetas()),
 
+                  //Ahora ponermos el boton de la parte inferior
 
+                  // Botón posicionado en la base
+                  Positioned(
+                    bottom: 20.h, // Distancia exacta desde el borde inferior
+                    left:
+                        24.w, // Márgenes laterales para que se estire o centre
+                    right: 24.w,
+                    child: SafeArea(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          //print('Botón presionado');
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset(
+                              'assets/icons/icono.png',
+                              width: 24,
+                              height: 24,
+                            ),
 
+                            SizedBox(width: 10),
 
-
-
-
-
-
-
-
-
-
-
+                            Text('Ingresar'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
+
             //
-            
-
-
-
           ],
-        )
         ),
+      ),
     );
   }
 }
