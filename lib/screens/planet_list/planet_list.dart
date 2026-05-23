@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:space_solar_app/core/responsive_helper.dart';
+import 'package:space_solar_app/routes/app_router.dart';
 import 'package:space_solar_app/widgets/background_gradient/background_gradient.dart';
 import 'package:space_solar_app/widgets/lista_planetas/lista_planetas.dart';
 import 'package:space_solar_app/widgets/logo/logotipo.dart';
@@ -25,7 +27,7 @@ class _PlanetListState extends State<PlanetList> {
             StarField(),
             //logotipo superior con padding
             Padding(
-              padding: const EdgeInsets.only(top: 40),
+              padding: const EdgeInsets.only(top: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -33,7 +35,7 @@ class _PlanetListState extends State<PlanetList> {
                   Logotipo(),
 
                   //separacion de 20 px
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
 
                   //Texto Planetas
                   Text(
@@ -42,7 +44,7 @@ class _PlanetListState extends State<PlanetList> {
                   ),
 
                   //separacion de 20 px
-                  SizedBox(height: 20),
+                  SizedBox(height: 15),
 
                   //Lista de planetas
                   Expanded(child: ListaPlanetas()),
@@ -58,20 +60,20 @@ class _PlanetListState extends State<PlanetList> {
                     child: SafeArea(
                       child: ElevatedButton(
                         onPressed: () {
-                          //print('Botón presionado');
+                          context.go(AppRoutes.home);
                         },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Image.asset(
                               'assets/icons/icono.png',
-                              width: 24,
-                              height: 24,
+                              //width: 24,
+                              height: 25,
                             ),
 
-                            SizedBox(width: 10),
+                            
 
-                            Text('Ingresar'),
+                      
                           ],
                         ),
                       ),

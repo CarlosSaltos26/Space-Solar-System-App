@@ -58,7 +58,7 @@ class _SistemaSolarState extends State<SistemaSolar> with SingleTickerProviderSt
       ]
     },
     {'nombre': 'urano',    'radio': 135.0, 'ratio': 2.0, 'vel': 0.5, 'tam': 35.0, 'anguloInicial': 0.9, 'asset': 'assets/planetas/urano.png'},
-    {'nombre': 'neptuno',  'radio': 150.0, 'ratio': 2.1, 'vel': 0.4, 'tam': 35.0, 'anguloInicial': 3.9, 'asset': 'assets/planetas/neptuno.png'},
+    {'nombre': 'neptuno',  'radio': 150.0, 'ratio': 2.1, 'vel': 0.4, 'tam': 35.0, 'anguloInicial': 1.9, 'asset': 'assets/planetas/neptuno.png'},
   ];
 
   @override
