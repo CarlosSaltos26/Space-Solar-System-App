@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:space_solar_app/data/providers/planet_provider.dart';
-import 'package:space_solar_app/data/services/api_service.dart';
+//import 'package:space_solar_app/data/services/api_service.dart';
 import 'package:space_solar_app/widgets/background_gradient/background_gradient.dart';
 import 'package:space_solar_app/widgets/btn_explorar/boton_explorar.dart';
 import 'package:space_solar_app/widgets/logo/logotipo.dart';
@@ -29,11 +29,11 @@ class HomeScreen extends StatelessWidget {
     await provider.fetchPlanets();
     
     // 👇 3. AQUÍ PONEMOS EL PRINT 
-    print('¡Planetas listos en Provider! Total cargados: ${provider.planets.length}');
+    //print('¡Planetas listos en Provider! Total cargados: ${provider.planets.length}');
     
     // Si quieres imprimir el nombre del primer objeto de la lista para probar:
     if(provider.planets.isNotEmpty) {
-      print('Primer cuerpo celeste en la lista: ${provider.planets.first.englishName}');
+      //print('Primer cuerpo celeste en la lista: ${provider.planets.first.englishName}');
     }
     
   });
