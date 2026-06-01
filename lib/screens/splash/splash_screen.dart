@@ -23,7 +23,10 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 8), () {
       if (mounted) {
         // Usamos context.go para que no pueda regresar al splash con el botón atrás
-        context.go(AppRoutes.home); 
+        
+        //Aqui vuelvo leugo que tenga la pantalla detale lista
+        //context.go(AppRoutes.home);
+        context.go(AppRoutes.detail);  
       }
     });
   }
