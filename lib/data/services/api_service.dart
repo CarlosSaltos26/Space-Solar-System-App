@@ -25,6 +25,7 @@ class ApiService {
         List<dynamic> data = response.data['bodies'];
         //print('¡API CONECTADA! Datos crudos del servidor: ${response.data}');
         // Convertimos cada elemento de esa lista en un PlanetModel
+        //print(data);
         return data.map((json) => PlanetModel.fromJson(json)).toList();
       } else {
         throw Exception('Error al cargar datos');

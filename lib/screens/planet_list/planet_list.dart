@@ -70,10 +70,6 @@ class _PlanetListState extends State<PlanetList> {
                               //width: 24,
                               height: 25,
                             ),
-
-                            
-
-                      
                           ],
                         ),
                       ),

@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
         
         //Aqui vuelvo leugo que tenga la pantalla detale lista
         //context.go(AppRoutes.home);
-        context.go(AppRoutes.detail);  
+        context.go(AppRoutes.home);  
       }
     });
   }

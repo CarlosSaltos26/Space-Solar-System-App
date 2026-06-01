@@ -1,69 +1,131 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:space_solar_app/data/providers/planet_provider.dart';
+import 'package:space_solar_app/data/models/planet_model.dart';
+import 'package:space_solar_app/routes/app_router.dart';
 
 class ListaPlanetas extends StatelessWidget {
   const ListaPlanetas({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> planetas = [
-      {'nombre': 'Mercurio', 'asset': 'assets/planetas/mercurio.png'},
-      {'nombre': 'Venus', 'asset': 'assets/planetas/mercurio.png'}, // Ojo: luego cambias este asset a venus.png
-      {'nombre': 'Tierra', 'asset': 'assets/planetas/tierra.png'},
-      {'nombre': 'Marte', 'asset': 'assets/planetas/marte.png'},
-      {'nombre': 'Jupiter', 'asset': 'assets/planetas/jupiter.png'},
-      {'nombre': 'Saturno', 'asset': 'assets/planetas/saturno.png'},
-      {'nombre': 'Urano', 'asset': 'assets/planetas/urano.png'},
-      {'nombre': 'Neptuno', 'asset': 'assets/planetas/neptuno.png'},
+    // 1. Escuchamos el Provider que tiene los planetas en memoria
+    final planetProvider = Provider.of<PlanetProvider>(context);
+    
+    // 2. Filtramos la lista para quedarnos solo con los planetas reales
+    final List<PlanetModel> planetasApi = planetProvider.planets.where((b) => b.isPlanet).toList();
+
+    final List<String> nombrePlanetaEsp = [
+        'Mercurio',
+        'Venus',
+        'Tierra',
+        'Marte',
+        'Jupiter',
+        'Saturno',
+        'Urano',
+        'Neptuno'
     ];
 
-    // 🚀 Usamos GridView en lugar de ListView para hacer la cuadrícula de 2 en 2
+    // HACEMOS LA MAGIA DEL ORDENAMIENTO
+    if (planetasApi.isNotEmpty) {
+      // Definimos el orden estricto del Sistema Solar usando los IDs exactos de la API
+      final List<String> ordenCorrectoIds = [
+        'mercure',
+        'venus',
+        'terre',
+        'mars',
+        'jupiter',
+        'saturne',
+        'uranus',
+        'neptune'
+      ];
+
+      // Ordenamos la lista original dinámicamente
+      planetasApi.sort((a, b) {
+        int indexA = ordenCorrectoIds.indexOf(a.id);
+        int indexB = ordenCorrectoIds.indexOf(b.id);
+        
+        if (indexA == -1) indexA = 99;
+        if (indexB == -1) indexB = 99;
+        
+        return indexA.compareTo(indexB);
+      });
+    }
+
+    // Si la API sigue cargando en segundo plano, mostramos el indicador
+    if (planetProvider.isLoading && planetasApi.isEmpty) {
+      return const Center(child: CircularProgressIndicator(color: Colors.orange));
+    }
+
+    // 3. Mapa local de assets asociados al ID de la API
+    final Map<String, String> planetAssets = {
+      'mercure': 'assets/planetas/mercurio.png',
+      'venus': 'assets/planetas/venus.png',
+      'terre': 'assets/planetas/tierra.png',
+      'mars': 'assets/planetas/marte.png',
+      'jupiter': 'assets/planetas/jupiter.png',
+      'saturne': 'assets/planetas/saturno.png',
+      'uranus': 'assets/planetas/urano.png',
+      'neptune': 'assets/planetas/neptuno.png',
+    };
+
     return GridView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      itemCount: planetas.length,
-      // GridDelegate controla la estructura física de la cuadrícula
+      itemCount: planetasApi.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,       // 👈 ¡Aquí defines que aparezcan exactamente DOS planetas por fila!
-        crossAxisSpacing: 12,    // Espacio horizontal entre las dos tarjetas
-        mainAxisSpacing: 12,     // Espacio vertical entre filas
-        childAspectRatio: 0.85,  // Relación de aspecto (Ancho / Alto). Ajusta este número para hacerlas más altas o bajas
+        crossAxisCount: 2,       
+        crossAxisSpacing: 12,    
+        mainAxisSpacing: 12,     
+        childAspectRatio: 0.85,  
       ),
       itemBuilder: (context, index) {
-        final planeta = planetas[index];
+        // Obtenemos el objeto del planeta de la API en memoria
+        final planet = planetasApi[index];
+        
+        // Buscamos su asset correspondiente
+        final assetPath = planetAssets[planet.id] ?? 'assets/planetas/mercurio.png';
 
-        return Card(
-          color: Colors.white.withValues(alpha: 0.05),
-          elevation: 1,
-          margin: EdgeInsets.zero, // El GridView ya maneja el espaciado con mainAxisSpacing
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-            side: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Imagen del Planeta ocupando el espacio principal de la tarjeta
-                Expanded(
-                  child: Image.asset(
-                    planeta['asset']!,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.public, color: Colors.blueGrey, size: 50);
-                    },
+        return GestureDetector(
+          onTap: () {
+            // Enviamos el mapa con el planeta Y el index usando GoRouter
+            context.push(
+              AppRoutes.detail, 
+              extra: {
+                'planet': planet,
+                'index': index, 
+              },
+            );
+          },
+          child: Card(
+            color: Colors.white.withValues(alpha: 0.05),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+              side: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Image.asset(
+                      assetPath,
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                // Nombre del Planeta abajo de la imagen
-                Text(
-                  planeta['nombre']!,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                  const SizedBox(height: 10),
+                  Text(
+                    // CORRECCIÓN: Leemos directamente el nombre del modelo mapeado de la API
+                    nombrePlanetaEsp[index].toUpperCase(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

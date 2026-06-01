@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:space_solar_app/core/responsive_helper.dart';
+import 'package:space_solar_app/data/models/planet_model.dart'; // Importamos el modelo
 import 'package:space_solar_app/theme/theme_data.dart';
 
 class DetailCardPlanet extends StatefulWidget {
-  const DetailCardPlanet({super.key});
+  // 1. Recibimos el planeta seleccionado desde la pantalla de detalle
+  final PlanetModel planet;
+  final int planetIndex;
+
+  final List<String> datosPlanetas = [
+    'El mundo más cercano al Sol. Es un desierto de extremos térmicos, sin atmósfera y cubierto de cráteres, donde un año dura apenas 88 días',
+    'El gemelo malvado de la Tierra. Está envuelto en una densa atmósfera de invernadero que atrapa el calor, convirtiéndolo en el planeta más caliente.',
+    'Nuestro oasis cósmico. El único mundo conocido con agua líquida en superficie, una atmósfera perfecta y el milagro de la vida en abundancia.',
+    'El planeta rojo. Un desierto frío y polvoriento con canales secos y volcanes gigantes, que hoy es el principal objetivo de la exploración espacial.',
+    'El gigante gaseoso y rey del Sistema Solar. Una enorme bola de hidrógeno y helio con tormentas milenarias y más de noventa lunas.',
+    'La joya del vecindario. Famoso por su espectacular y complejo sistema de anillos de hielo y roca, es el segundo planeta más grande.',
+    'El gigante de hielo que rueda de lado. Su eje de rotación está totalmente inclinado, y su atmósfera de metano le da un tono azulado.',
+    'El titán azul y el más lejano del Sol. Un mundo helado azotado por los vientos más rápidos y violentos de todo el Sistema Solar.',
+    
+  ];  
+
+  DetailCardPlanet({super.key, required this.planet, required this.planetIndex});
 
   @override
   State<DetailCardPlanet> createState() => _DetailCardPlanetState();
@@ -13,27 +30,47 @@ class _DetailCardPlanetState extends State<DetailCardPlanet> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  // --- ESTRUCTURA DE 9 DATOS EN ORDEN ESTRICTO (3 POR PÁGINA) ---
-  final List<Map<String, dynamic>> _datosPagina1 = [
-    {'iconNum': 1, 'label': 'Temperatura', 'value': '167 °C'},
-    {'iconNum': 2, 'label': 'Gravedad', 'value': '3.7 m/s²'},
-    {'iconNum': 3, 'label': 'Distancia Sol', 'value': '57.9M km'},
-  ];
-
-  final List<Map<String, dynamic>> _datosPagina2 = [
-    {'iconNum': 4, 'label': 'Anomalía', 'value': '230.3°'},
-    {'iconNum': 5, 'label': 'Rot. Sideral', 'value': '58.6 días'},
-    {'iconNum': 6, 'label': 'Rot. Orbital', 'value': '88 días'},
-  ];
-
-  final List<Map<String, dynamic>> _datosPagina3 = [
-    {'iconNum': 7, 'label': 'Densidad', 'value': '5.43 g/cm³'},
-    {'iconNum': 8, 'label': 'Lunas', 'value': '0'},
-    {'iconNum': 9, 'label': 'Radio Polar', 'value': '2,439 km'},
-  ];
 
   @override
   Widget build(BuildContext context) {
+    // 2. Construimos las listas dinámicamente usando "widget.planet" para leer la memoria de la API
+    
+    // --- PÁGINA 1: Datos reales de la API ---
+    final List<Map<String, dynamic>> datosPagina1 = [
+      {
+        'iconNum': 1, 
+        'label': 'Temperatura', 
+        // EXPLICACIÓN DEL DATO: Accedemos a widget.planet.temperature y le concatenamos la unidad string.
+        'value': '${widget.planet.temperature} °C' 
+      },
+      {
+        'iconNum': 2, 
+        'label': 'Gravedad', 
+        // EXPLICACIÓN DEL DATO: Usamos la propiedad gravity de tu modelo.
+        'value': '${widget.planet.gravity} m/s²' 
+      },
+      {
+        'iconNum': 3, 
+        'label': 'Distancia Sol', 
+        // PRÁCTICA: Modifica este campo usando 'widget.planet.semimajorAxis' cuando completes los datos
+        'value': '${(widget.planet.semimajorAxis / 1000000).toStringAsFixed(1)}M km' 
+      },
+    ];
+
+    // --- PÁGINA 2: ---
+    final List<Map<String, dynamic>> datosPagina2 = [
+      {'iconNum': 4, 'label': 'Anomalía', 'value': '${widget.planet.anomalia}°'}, 
+      {'iconNum': 5, 'label': 'Rot. Sideral', 'value': '${widget.planet.sideral} días'},
+      {'iconNum': 6, 'label': 'Rot. Orbital', 'value': '${widget.planet.rotacion} días'},  
+    ];
+
+    // --- PÁGINA 3:  ---
+    final List<Map<String, dynamic>> datosPagina3 = [
+      {'iconNum': 7, 'label': 'Densidad', 'value': '${widget.planet.densidad} g/cm³'}, 
+      {'iconNum': 8, 'label': 'Lunas', 'value': '${widget.planet.moons}'},             
+      {'iconNum': 9, 'label': 'Radio Polar', 'value': '${widget.planet.polar} km'},
+    ];
+
     return Column(
       children: [
         Card(
@@ -60,12 +97,11 @@ class _DetailCardPlanetState extends State<DetailCardPlanet> {
                 ),
                 SizedBox(height: 25.h),
 
-                // Resumen del Planeta Mercurio
                 Text(
-                  "Mercurio es el planeta más pequeño de nuestro sistema solar y el más cercano al Sol. Su superficie está plagada de cráteres debido al impacto constante de meteoritos, y al no poseer una atmósfera densa, experimenta las variaciones de temperatura más extremas de todo el sistema.",
+                  widget.datosPlanetas[widget.planetIndex],
                   textAlign: TextAlign.justify,
                   style: TextStyle(
-                    fontSize: 34.sp,
+                    fontSize: 40.sp,
                     color: Colors.white.withValues(alpha: 0.85),
                     fontFamily: 'Montserrat',
                     height: 1.4,
@@ -73,7 +109,6 @@ class _DetailCardPlanetState extends State<DetailCardPlanet> {
                 ),
                 SizedBox(height: 35.h),
 
-                // Deslizador (Swipe) con altura optimizada para las 3 páginas
                 SizedBox(
                   height: 280.h, 
                   child: PageView(
@@ -84,15 +119,15 @@ class _DetailCardPlanetState extends State<DetailCardPlanet> {
                       });
                     },
                     children: [
-                      _buildGridInfo(_datosPagina1),
-                      _buildGridInfo(_datosPagina2),
-                      _buildGridInfo(_datosPagina3),
+                      // Pasamos las variables locales que ya computan los datos dinámicos
+                      _buildGridInfo(datosPagina1),
+                      _buildGridInfo(datosPagina2),
+                      _buildGridInfo(datosPagina3),
                     ],
                   ),
                 ),
                 SizedBox(height: 25.h),
 
-                // Indicador de páginas actualizado a 3 puntitos (Dots)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(3, (index) => _buildIndicator(index == _currentPage)),
@@ -105,9 +140,10 @@ class _DetailCardPlanetState extends State<DetailCardPlanet> {
     );
   }
 
-  // --- CUADRITOS CORREGIDOS CON BORDER.ALL Y TEXTOS MÁS GRANDES ---
+  // Tu función de diseño _buildGridInfo y _buildIndicator se quedan exactamente igual...
   Widget _buildGridInfo(List<Map<String, dynamic>> data) {
-    return GridView.count(
+     // ... (Tu código actual de GridView.count se mantiene idéntico sin cambios)
+     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 3,
@@ -117,10 +153,7 @@ class _DetailCardPlanetState extends State<DetailCardPlanet> {
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.02),
           borderRadius: BorderRadius.circular(15),       
-          border: Border.all(
-            color: Colors.white.withValues(alpha: 0.4), // Contorno de 1px guardado sin errores
-            width: 1.0,
-          ),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.4), width: 1.0),
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
@@ -128,32 +161,20 @@ class _DetailCardPlanetState extends State<DetailCardPlanet> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                height: 65.h, // Icono ligeramente adaptado
-                child: Image.asset(
-                  'assets/icons/icono${item['iconNum']}.png',
-                  fit: BoxFit.contain,
-                ),
+                height: 65.h,
+                child: Image.asset('assets/icons/icono${item['iconNum']}.png', fit: BoxFit.contain),
               ),
               SizedBox(height: 12.h),
               Text(
                 item['label'].toUpperCase(),
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 24.sp, // Un pelín más grande como me pediste
-                  color: AppTheme.spaceOrange,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.5,
-                ),
+                style: TextStyle(fontSize: 24.sp, color: AppTheme.spaceOrange, fontWeight: FontWeight.w700),
               ),
               SizedBox(height: 6.h),
               Text(
                 item['value'],
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 30.sp, // Valor numérico resaltado e imponente
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 30.sp, color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ],
           ),

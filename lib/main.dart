@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:space_solar_app/data/providers/planet_provider.dart';
+import 'package:space_solar_app/theme/theme_data.dart';
 import 'routes/app_router.dart';
  // Tu archivo de rutas con GoRouter
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         title: 'Space Solar System',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData.dark(), // Tu configuración de tema
+        theme: AppTheme.darkTheme, // Tu configuración de tema
         routerConfig: appRouter, // Tu configuración de GoRouter
       ),
     );
