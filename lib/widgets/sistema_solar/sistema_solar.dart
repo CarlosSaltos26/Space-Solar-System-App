@@ -9,56 +9,191 @@ class SistemaSolar extends StatefulWidget {
   State<SistemaSolar> createState() => _SistemaSolarState();
 }
 
-class _SistemaSolarState extends State<SistemaSolar> with SingleTickerProviderStateMixin {
+class _SistemaSolarState extends State<SistemaSolar>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   final Stopwatch _stopwatch = Stopwatch();
 
   // ESTRUCTURA ACTUALIZADA: Añadimos la propiedad opcional 'lunas' a los planetas
   final List<Map<String, dynamic>> planetasData = [
-    {'nombre': 'mercurio', 'radio': 50.0,  'ratio': 1.2, 'vel': 1.3, 'tam': 20.0, 'anguloInicial': 0.5, 'asset': 'assets/planetas/mercurio.png'},
-    {'nombre': 'venus',    'radio': 65.0,  'ratio': 1.2, 'vel': 1.1, 'tam': 22.0, 'anguloInicial': 1.8, 'asset': 'assets/planetas/venus.png'},
     {
-      'nombre': 'tierra',   
-      'radio': 85.0,  
-      'ratio': 1.4, 
-      'vel': 0.9, 
-      'tam': 28.0, 
-      'anguloInicial': 3.2, 
+      'nombre': 'mercurio',
+      'radio': 50.0,
+      'ratio': 1.2,
+      'vel': 1.3,
+      'tam': 20.0,
+      'anguloInicial': 0.5,
+      'asset': 'assets/planetas/mercurio.png',
+    },
+    {
+      'nombre': 'venus',
+      'radio': 65.0,
+      'ratio': 1.2,
+      'vel': 1.1,
+      'tam': 22.0,
+      'anguloInicial': 1.8,
+      'asset': 'assets/planetas/venus.png',
+    },
+    {
+      'nombre': 'tierra',
+      'radio': 85.0,
+      'ratio': 1.4,
+      'vel': 0.9,
+      'tam': 28.0,
+      'anguloInicial': 3.2,
       'asset': 'assets/planetas/tierra.png',
       // Agregamos su satélite natural
       'lunas': [
-        {'nombre': 'luna', 'radio': 16.0, 'ratio': 1.1, 'vel': 4.0, 'tam': 6.0, 'anguloInicial': 0.0, 'asset': 'assets/planetas/luna.png'}
-      ]
+        {
+          'nombre': 'luna',
+          'radio': 16.0,
+          'ratio': 1.1,
+          'vel': 4.0,
+          'tam': 6.0,
+          'anguloInicial': 0.0,
+          'asset': 'assets/planetas/luna.png',
+        },
+      ],
     },
-    {'nombre': 'marte',    'radio': 105.0, 'ratio': 1.6, 'vel': 0.8, 'tam': 25.0, 'anguloInicial': 4.5, 'asset': 'assets/planetas/marte.png'},
     {
-      'nombre': 'jupiter',  
-      'radio': 115.0, 
-      'ratio': 1.8, 
-      'vel': 0.7, 
-      'tam': 25.0, 
-      'anguloInicial': 2.1, 
+      'nombre': 'marte',
+      'radio': 105.0,
+      'ratio': 1.6,
+      'vel': 0.8,
+      'tam': 25.0,
+      'anguloInicial': 4.5,
+      'asset': 'assets/planetas/marte.png',
+    },
+    {
+      'nombre': 'jupiter',
+      'radio': 115.0,
+      'ratio': 1.8,
+      'vel': 0.7,
+      'tam': 25.0,
+      'anguloInicial': 2.1,
       'asset': 'assets/planetas/jupiter.png',
       // Júpiter tiene muchas lunas, ponemos 2 de ejemplo esparcidas
       'lunas': [
-        {'nombre': 'io',     'radio': 14.0, 'ratio': 1.2, 'vel': 5.0, 'tam': 5.0, 'anguloInicial': 1.0, 'asset': 'assets/planetas/luna.png'},
-        {'nombre': 'europa', 'radio': 19.0, 'ratio': 1.2, 'vel': 3.5, 'tam': 4.5, 'anguloInicial': 3.5, 'asset': 'assets/planetas/luna.png'}
-      ]
+        {
+          'nombre': 'io',
+          'radio': 14.0,
+          'ratio': 1.2,
+          'vel': 5.0,
+          'tam': 5.0,
+          'anguloInicial': 1.0,
+          'asset': 'assets/planetas/luna.png',
+        },
+        {
+          'nombre': 'europa',
+          'radio': 19.0,
+          'ratio': 1.2,
+          'vel': 3.5,
+          'tam': 4.5,
+          'anguloInicial': 3.5,
+          'asset': 'assets/planetas/luna.png',
+        },
+      ],
     },
     {
-      'nombre': 'saturno',  
-      'radio': 125.0, 
-      'ratio': 1.9, 
-      'vel': 0.6, 
-      'tam': 80.0, 
-      'anguloInicial': 5.8, 
+      'nombre': 'saturno',
+      'radio': 125.0,
+      'ratio': 1.9,
+      'vel': 0.6,
+      'tam': 80.0,
+      'anguloInicial': 5.8,
       'asset': 'assets/planetas/saturno.png',
       'lunas': [
-        {'nombre': 'titan', 'radio': 22.0, 'ratio': 1.3, 'vel': 3.0, 'tam': 7.0, 'anguloInicial': 0.0, 'asset': 'assets/planetas/luna.png'}
-      ]
+        {
+          'nombre': 'titan',
+          'radio': 22.0,
+          'ratio': 1.3,
+          'vel': 3.0,
+          'tam': 7.0,
+          'anguloInicial': 0.0,
+          'asset': 'assets/planetas/luna.png',
+        },
+      ],
     },
-    {'nombre': 'urano',    'radio': 135.0, 'ratio': 2.0, 'vel': 0.5, 'tam': 35.0, 'anguloInicial': 0.9, 'asset': 'assets/planetas/urano.png'},
-    {'nombre': 'neptuno',  'radio': 150.0, 'ratio': 2.1, 'vel': 0.4, 'tam': 35.0, 'anguloInicial': 1.9, 'asset': 'assets/planetas/neptuno.png'},
+    {
+      'nombre': 'urano',
+      'radio': 135.0,
+      'ratio': 2.0,
+      'vel': 0.5,
+      'tam': 35.0,
+      'anguloInicial': 0.9,
+      'asset': 'assets/planetas/urano.png',
+    },
+    {
+      'nombre': 'neptuno',
+      'radio': 150.0,
+      'ratio': 2.1,
+      'vel': 0.4,
+      'tam': 35.0,
+      'anguloInicial': 1.9,
+      'asset': 'assets/planetas/neptuno.png',
+    },
+
+    // ── Planetas enanos ──────────────────────────────
+
+    // Ceres — cinturón de asteroides, entre Marte (105) y Júpiter (115)
+    {
+      'esEnano': true,
+      'nombre': 'ceres',
+      'radio': 110.0,
+      'ratio': 1.7,
+      'vel': 0.75,
+      'tam': 9.0,
+      'anguloInicial': 2.8,
+      'asset': 'assets/planetas/ceres.png',
+    },
+
+    // Plutón — zona de Kuiper, más allá de Neptuno (150)
+    {
+      'esEnano': true,
+      'nombre': 'pluton',
+      'radio': 158.0,
+      'ratio': 2.2,
+      'vel': 0.35,
+      'tam': 14.0,
+      'anguloInicial': 1.2,
+      'asset': 'assets/planetas/pluton.png',
+    },
+
+    // Eris — más excéntrica que Plutón
+    {
+      'esEnano': true,
+      'nombre': 'eris',
+      'radio': 163.0,
+      'ratio': 2.3,
+      'vel': 0.28,
+      'tam': 12.0,
+      'anguloInicial': 4.1,
+      'asset': 'assets/planetas/eris.png',
+    },
+
+    // Makemake
+    {
+      'esEnano': true,
+      'nombre': 'makemake',
+      'radio': 160.0,
+      'ratio': 2.25,
+      'vel': 0.30,
+      'tam': 11.0,
+      'anguloInicial': 5.5,
+      'asset': 'assets/planetas/makemake.png',
+    },
+
+    // Haumea — órbita más inclinada, ratio diferente
+    {
+      'esEnano': true,
+      'nombre': 'haumea',
+      'radio': 156.0,
+      'ratio': 2.4,
+      'vel': 0.32,
+      'tam': 10.0,
+      'anguloInicial': 0.3,
+      'asset': 'assets/planetas/haumea.png',
+    },
   ];
 
   @override
@@ -81,18 +216,19 @@ class _SistemaSolarState extends State<SistemaSolar> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     Responsive().init(context);
-    double escalaGlobal = Responsive.screenWidth / 380.0; 
+    double escalaGlobal = Responsive.screenWidth / 380.0;
 
-    return Center( 
+    return Center(
       child: Transform.scale(
         scale: escalaGlobal,
         child: SizedBox(
-          width: 350, 
+          width: 350,
           height: 600,
           child: AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
-              final double tiempoTotal = _stopwatch.elapsedTicks / _stopwatch.frequency;
+              final double tiempoTotal =
+                  _stopwatch.elapsedTicks / _stopwatch.frequency;
 
               return Stack(
                 alignment: Alignment.center,
@@ -102,7 +238,7 @@ class _SistemaSolarState extends State<SistemaSolar> with SingleTickerProviderSt
                     size: Size.infinite,
                     painter: OrbitasPainter(planetasData),
                   ),
-                  
+
                   // Renderizado de planetas (y sus lunas internamente)
                   ...planetasData.map((data) {
                     return Planeta(
@@ -113,7 +249,8 @@ class _SistemaSolarState extends State<SistemaSolar> with SingleTickerProviderSt
                       anguloInicial: data['anguloInicial'],
                       assetPath: data['asset'],
                       tamano: data['tam'],
-                      lunas: data['lunas'], // Pasamos la lista de lunas (puede ser null)
+                      lunas:
+                          data['lunas'], // Pasamos la lista de lunas (puede ser null)
                     );
                   }),
                 ],
@@ -136,13 +273,14 @@ class Planeta extends StatelessWidget {
   final double tamano;
   final List<dynamic>? lunas; // Recibimos las lunas opcionales
 
-  const Planeta({super.key, 
-    required this.radioX, 
-    required this.radioY, 
-    required this.velocidad, 
-    required this.tiempo, 
+  const Planeta({
+    super.key,
+    required this.radioX,
+    required this.radioY,
+    required this.velocidad,
+    required this.tiempo,
     required this.anguloInicial,
-    required this.assetPath, 
+    required this.assetPath,
     required this.tamano,
     this.lunas,
   });
@@ -156,11 +294,11 @@ class Planeta extends StatelessWidget {
 
     return Transform.translate(
       offset: Offset(x, y),
-      // Usamos un Stack sin límites (clipBehavior: Clip.none) para que las lunas 
+      // Usamos un Stack sin límites (clipBehavior: Clip.none) para que las lunas
       // puedan orbitar por fuera del tamaño del contenedor del planeta padre.
       child: Stack(
         alignment: Alignment.center,
-        clipBehavior: Clip.none, 
+        clipBehavior: Clip.none,
         children: [
           // 1. Dibujamos el planeta en el centro
           Image.asset(assetPath, width: tamano, height: tamano),
@@ -169,18 +307,20 @@ class Planeta extends StatelessWidget {
           if (lunas != null)
             ...lunas!.map((lunaData) {
               // La luna usa el mismo 'tiempoTotal' continuo, pero con su propia velocidad (suele ser más rápida)
-              double tLuna = (tiempo * lunaData['vel'] * 0.15) + lunaData['anguloInicial'];
-              
+              double tLuna =
+                  (tiempo * lunaData['vel'] * 0.15) + lunaData['anguloInicial'];
+
               // Ecuación elíptica de la luna alrededor de su planeta
               double lunaX = lunaData['radio'] * math.cos(tLuna);
-              double lunaY = (lunaData['radio'] * lunaData['ratio']) * math.sin(tLuna);
+              double lunaY =
+                  (lunaData['radio'] * lunaData['ratio']) * math.sin(tLuna);
 
               return Transform.translate(
                 offset: Offset(lunaX, lunaY),
                 child: Image.asset(
-                  lunaData['asset'], 
-                  width: lunaData['tam'], 
-                  height: lunaData['tam']
+                  lunaData['asset'],
+                  width: lunaData['tam'],
+                  height: lunaData['tam'],
                 ),
               );
             }),
@@ -204,11 +344,18 @@ class OrbitasPainter extends CustomPainter {
     final centro = size.center(Offset.zero);
 
     for (var p in planetas) {
-      double rX = p['radio'];
-      double rY = rX * p['ratio'];
-      
-      Rect rect = Rect.fromLTRB(centro.dx - rX, centro.dy - rY, centro.dx + rX, centro.dy + rY);
-      canvas.drawOval(rect, paint);
+      final esEnano = p['esEnano'] == true;
+  paint.color = Colors.white.withValues(
+    alpha: esEnano ? 0.05 : 0.12, // órbitas enanas más tenues
+  );
+
+  double rX = p['radio'];
+  double rY = rX * p['ratio'];
+  Rect rect = Rect.fromLTRB(
+    centro.dx - rX, centro.dy - rY,
+    centro.dx + rX, centro.dy + rY,
+  );
+  canvas.drawOval(rect, paint);
     }
   }
 
