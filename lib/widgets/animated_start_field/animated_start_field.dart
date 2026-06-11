@@ -19,20 +19,11 @@ class _AnimatedStarFieldState extends State<AnimatedStarField> with SingleTicker
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 50), // Tiempo de la vuelta completa
-    )..repeat(); // Hace que la animación sea infinita
+      duration: const Duration(seconds: 50),
+    )..repeat();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_starsBack.isEmpty) {
-      final size = MediaQuery.of(context).size;
-      // Generamos 100 estrellas para el fondo y 50 para el frente
-      _starsBack = List.generate(100, (_) => Offset(_random.nextDouble() * size.width, _random.nextDouble() * size.height));
-      _starsFront = List.generate(50, (_) => Offset(_random.nextDouble() * size.width, _random.nextDouble() * size.height));
-    }
-  }
+  // ✅ didChangeDependencies eliminado completamente
 
   @override
   void dispose() {
@@ -42,20 +33,40 @@ class _AnimatedStarFieldState extends State<AnimatedStarField> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return CustomPaint(
-          size: Size.infinite,
-          painter: StarFieldPainter(
-            starsBack: _starsBack,
-            starsFront: _starsFront,
-            progress: _controller.value, // Valor de 0.0 a 1.0
-          ),
-        );
-      },
+  final size = MediaQuery.of(context).size;
+
+  // ✅ Genera estrellas solo una vez, aquí size YA tiene valores reales
+  if (_starsBack.isEmpty && size.width > 0) {
+    _starsBack = List.generate(
+      100,
+      (_) => Offset(
+        _random.nextDouble() * size.width,
+        _random.nextDouble() * size.height,
+      ),
+    );
+    _starsFront = List.generate(
+      50,
+      (_) => Offset(
+        _random.nextDouble() * size.width,
+        _random.nextDouble() * size.height,
+      ),
     );
   }
+
+  return AnimatedBuilder(
+    animation: _controller,
+    builder: (context, child) {
+      return CustomPaint(
+        size: Size(size.width, size.height),
+        painter: StarFieldPainter(
+          starsBack: _starsBack,
+          starsFront: _starsFront,
+          progress: _controller.value,
+        ),
+      );
+    },
+  );
+}
 }
 
 class StarFieldPainter extends CustomPainter {
@@ -79,17 +90,15 @@ class StarFieldPainter extends CustomPainter {
     // Dibujar frente (Rápido + Titileo)
     for (var star in starsFront) {
       double yPos = (star.dy + (progress * size.height)) % size.height;
-      // El titileo se logra con una función seno basada en el progreso
       double opacity = 0.2 + (0.6 * sin(progress * 2 * pi * 5 + star.dx).abs());
       canvas.drawCircle(
-        Offset(star.dx, yPos), 
-        //aqui cambio el tama;o de las estrellas del frente
-        1, 
-        paintFront..color = Colors.white.withValues(alpha: opacity)
+        Offset(star.dx, yPos),
+        1,
+        paintFront..color = Colors.white.withValues(alpha: opacity),
       );
     }
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true; // Necesario para animar
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

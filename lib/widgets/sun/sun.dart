@@ -10,7 +10,10 @@ class Sun extends StatelessWidget {
     return SizedBox(
       width: 200.w,
       height: 200.h,
-      child: Lottie.network('https://lottie.host/fdbc4744-dedb-41f0-a709-e61da79acf3b/PE9VP32Jsr.json'),
+      child: Lottie.asset(
+        'assets/animation/sol.json',
+        fit: BoxFit.contain,
+      ),
     );
   }
 }

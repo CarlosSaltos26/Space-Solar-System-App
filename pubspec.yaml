@@ -10,11 +10,16 @@ dependencies:
   dio: ^5.9.2
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.4
   flutter_svg: ^2.3.0
   go_router: ^17.2.3
   lottie: ^3.3.3
   provider: ^6.1.5+1
   sensors_plus: ^6.1.0
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  image_path: "assets/iconApp/iconoApp.png"
 
 dev_dependencies:
   flutter_test:
@@ -29,3 +34,6 @@ flutter:
     - assets/fonts/
     - assets/icons/
     - assets/asteroides/
+    - assets/buttons/
+    - assets/iconApp/
+    - assets/animation/

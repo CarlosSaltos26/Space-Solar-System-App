@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     
     // Lógica de espera y salto
-    Future.delayed(const Duration(seconds: 8), () {
+    Future.delayed(const Duration(seconds: 6), () {
       if (mounted) {
         // Usamos context.go para que no pueda regresar al splash con el botón atrás
         
@@ -40,10 +40,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
     return Scaffold(
       body: Stack(
+        fit: StackFit.expand,
       children: [
         BackgroundGradient(),
         
-        AnimatedStarField(),
+        Positioned.fill(child: AnimatedStarField()),
 
         Center(
             child: SizedBox(
