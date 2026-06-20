@@ -10,9 +10,11 @@ dependencies:
   dio: ^5.9.2
   flutter:
     sdk: flutter
+  flutter_cube: ^0.1.1
   flutter_launcher_icons: ^0.14.4
   flutter_svg: ^2.3.0
   go_router: ^17.2.3
+  just_audio: ^0.10.5
   lottie: ^3.3.3
   provider: ^6.1.5+1
   sensors_plus: ^6.1.0
@@ -37,3 +39,6 @@ flutter:
     - assets/buttons/
     - assets/iconApp/
     - assets/animation/
+    - assets/planeta3d/
+    - assets/planetaReal/
+    - assets/audio/

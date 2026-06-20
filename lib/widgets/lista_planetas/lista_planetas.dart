@@ -5,8 +5,28 @@ import 'package:space_solar_app/data/providers/planet_provider.dart';
 import 'package:space_solar_app/data/models/planet_model.dart';
 import 'package:space_solar_app/routes/app_router.dart';
 
-class ListaPlanetas extends StatelessWidget {
+class ListaPlanetas extends StatefulWidget {
   const ListaPlanetas({super.key});
+
+  @override
+  State<ListaPlanetas> createState() => _ListaPlanetasState();
+}
+
+class _ListaPlanetasState extends State<ListaPlanetas> {
+  @override
+  void initState() {
+    super.initState();
+    // ✅ Disparamos el fetch apenas se monta esta pantalla,
+    // sin depender de que HomeScreen ya haya terminado su propia llamada.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<PlanetProvider>(context, listen: false);
+      // Solo volvemos a pedir si no hay datos en memoria todavía,
+      // así evitamos llamadas duplicadas si HomeScreen ya las cargó.
+      if (provider.planets.isEmpty && !provider.isLoading) {
+        provider.fetchPlanets();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +76,34 @@ class ListaPlanetas extends StatelessWidget {
     // Si la API sigue cargando en segundo plano, mostramos el indicador
     if (planetProvider.isLoading && planetasApi.isEmpty) {
       return const Center(child: CircularProgressIndicator(color: Colors.orange));
+    }
+
+    // Si terminó de cargar pero hubo un error y no hay datos, lo mostramos
+    if (!planetProvider.isLoading &&
+        planetasApi.isEmpty &&
+        planetProvider.errorMessage.isNotEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.error_outline, color: Colors.orange, size: 40),
+              const SizedBox(height: 12),
+              Text(
+                planetProvider.errorMessage,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white70),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => planetProvider.fetchPlanets(),
+                child: const Text('Reintentar'),
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     // 3. Mapa local de assets asociados al ID de la API

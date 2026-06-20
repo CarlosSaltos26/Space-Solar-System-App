@@ -46,11 +46,11 @@ class _PlanetListState extends State<PlanetList> {
             ),
           ),
 
-          // ✅ Botón ahora sí es hijo directo del Stack
+          // Botón CON ICONO DE PLANTEA
           Positioned(
             bottom: 20,
-            left: 24,
-            right: 24,
+            left: 140, 
+            right: 140,
             child: SafeArea(
               child: ElevatedButton(
                 onPressed: () {
@@ -61,13 +61,14 @@ class _PlanetListState extends State<PlanetList> {
                   children: [
                     Image.asset(
                       'assets/icons/icono.png',
-                      height: 25,
+                      height: 25
                     ),
                   ],
                 ),
               ),
             ),
           ),
+          
         ],
       ),
     ),

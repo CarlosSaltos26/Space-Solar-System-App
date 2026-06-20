@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
               // 3. AQUÍ USAS EL RESPONSIVE
               // Si en tu diseño de 1080px el logo medía 600px, pones 600.w
               width: 900.w, 
-              height: 900.w, // Generalmente los logos son cuadrados
+              height: 900.w, 
               child: const AnimatedLogo(),
             ),
           ),

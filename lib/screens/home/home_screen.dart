@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:space_solar_app/data/providers/planet_provider.dart';
+import 'package:space_solar_app/data/services/audio_service.dart';
 import 'package:space_solar_app/widgets/background_gradient/background_gradient.dart';
 import 'package:space_solar_app/widgets/btn_explorar/boton_explorar.dart';
 import 'package:space_solar_app/widgets/cinturon_asteriodes/cinturon_asteroides.dart';
@@ -24,6 +25,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   double _parallaxX = 0.0;
   double _parallaxY = 0.0;
   double _smoothX = 0.0;
@@ -118,6 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _initSensors();
     _initSmoothTimer();
     _fetchPlanets();
+    
   }
 
   void _fetchPlanets() {
@@ -155,6 +158,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _accelSubscription?.cancel();
     _smoothTimer?.cancel();
+    // AudioService NO se dispone aquí: es global y vive mientras la app
+    // esté abierta, no solo mientras HomeScreen esté montada.
     super.dispose();
   }
 
@@ -212,6 +217,18 @@ class _HomeScreenState extends State<HomeScreen> {
             child: InfoButton(onTap: () => setState(() => _cardAbierto = 5)),
           ),
 
+          // Botón flotante en la esquina superior derecha.
+
+          Positioned(
+            top: 40.0, // Ajusta según el notch o SafeArea de tu dispositivo
+            right: 16.0,
+            child: Consumer<AudioService>(
+              builder: (context, audioService, child) {
+                return _buildAudioButton(audioService);
+              },
+            ),
+          ),
+
           // ── Card glassmorphism ───────────────────────
           if (_cardAbierto != null)
             Positioned.fill(
@@ -231,6 +248,35 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  // Botón de audio
+  Widget _buildAudioButton(AudioService audioService) {
+    return Container(
+      width: 36,
+      height: 36,
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.4),
+        shape: BoxShape.circle,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        shape: const CircleBorder(),
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: audioService.toggleAudio,
+          child: Center(
+            child: Icon(
+              // Si está sonando muestra "volume_up"
+              // Si está pausado, muestra "play_arrow"
+              audioService.isPlaying ? Icons.volume_up : Icons.play_arrow,
+              color: Colors.white.withValues(alpha: 0.8),
+              size: 18,
+            ),
+          ),
+        ),
       ),
     );
   }
